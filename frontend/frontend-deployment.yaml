@@ -19,7 +19,7 @@ spec:
         - containerPort: 80
         env:
         - name: BACKEND_SERVICE_IP
-          value: "34.132.122.163"  # Replace with your actual backend service DNS name
+          value: "34.122.116.40"  # Replace with your actual backend service DNS name
       imagePullSecrets:
       - name: db-credentials
 ---
