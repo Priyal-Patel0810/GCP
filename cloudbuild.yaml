@@ -1,0 +1,27 @@
+options:
+  logging: CLOUD_LOGGING_ONLY  # Or specify a logs bucket here
+
+steps:
+  # Build and push frontend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/citric-aleph-424801-u6/frontend:latest', './frontend']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/citric-aleph-424801-u6/frontend:latest']
+
+  # Build and push backend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/citric-aleph-424801-u6/backend:latest', './backend']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/citric-aleph-424801-u6/backend:latest']
+
+  # Apply Kubernetes deployments
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', './frontend/frontend-deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', './backend/backend-deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster'
